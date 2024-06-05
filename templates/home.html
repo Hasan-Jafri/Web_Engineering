@@ -1,0 +1,87 @@
+﻿{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home_style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+
+            <div class="left-nav">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='assets/images/home_logo.png') }}" alt="Logo">
+                </div> 
+            </div>
+            <div class="right-nav">
+                <div class="search-container">
+                    <form action="/search" method="post">
+                    <input type="text" placeholder="Search..." name = 'search_query'>
+                    <button type="submit"><img src="{{ url_for('static', filename='assets/images/search.png') }}" alt="Search"></button>
+                </form>
+                </div>
+                <div class="user-icon">
+                    <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="User">
+                </div>
+            </div>
+            
+        </div>
+    </header>
+    
+    <main>
+        <h1>Hot Picks of the Week</h1>
+        <div class="book-grid" id="book-grid">
+            <!-- Book items will be inserted dynamically here -->
+            {{ book_html | safe }}
+        </div>
+    </main>
+
+    <!-- <script>
+        // Retrieve the 'books' variable from Flask
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookGrid = document.getElementById('book-grid');
+            
+            // Loop through each book
+            books.forEach(book => {
+                const bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+                
+                // Create image element for book cover
+                const bookImage = document.createElement('img');
+                bookImage.src = "https://covers.openlibrary.org/b/id/" + book[1] + "-L.jpg";
+                bookImage.alt = book[0];
+                
+                // Create paragraph element for book title
+                const bookTitle = document.createElement('p');
+                bookTitle.classList.add('title');
+                bookTitle.textContent = book[0];
+                
+                // Create div element for book rating stars
+                const bookRating = document.createElement('div');
+                bookRating.classList.add('rating');
+                bookRating.innerHTML = getRatingStars(4);
+                
+                // Append elements to the book item
+                bookItem.appendChild(bookImage);
+                bookItem.appendChild(bookTitle);
+                bookItem.appendChild(bookRating);
+                
+                // Append book item to the book grid
+                bookGrid.appendChild(bookItem);
+            });
+        });
+    
+        // Function to generate star rating HTML based on rating value
+        function getRatingStars(rating) {
+            const fullStars = '★'.repeat(Math.floor(rating));
+            const emptyStars = '☆'.repeat(5 - Math.floor(rating));
+            return fullStars + emptyStars;
+        }
+    </script> -->
+</body>
+</html>
+
+{% endblock %}

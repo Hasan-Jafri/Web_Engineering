@@ -1,0 +1,42 @@
+﻿
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/search_result.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+
+            <div class="left-nav">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='assets/images/home_logo.png') }}" alt="Logo">
+                </div> 
+            </div>
+            <div class="right-nav">
+                <div class="user-icon">
+                    <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="User">
+                </div>
+            </div>
+            
+        </div>
+    </header>
+    <main>
+        <div class="search-results">
+            <h2>Search Results for {{text}}</h2>
+            <div class="book-grid" id="book-grid">
+                <!-- Book items will be inserted dynamically here -->
+                <!-- Add more book items as needed -->
+                {{ book_html | safe }}
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
+{% endblock %}

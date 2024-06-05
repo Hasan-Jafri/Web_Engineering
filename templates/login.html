@@ -1,0 +1,46 @@
+﻿{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login_styles.css') }}">
+    <title>LITERARY NEXUS</title>
+</head>
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='assets/images/logo_.png') }}" alt="Logo icon" class="logo-icon">
+        <!-- <b><span style="color: #00698f;">LITERARY </span><span style="color: black;">NEXUS</span></b> -->
+    </div>
+    <div class="sign-in-container">
+
+
+        <h1>SIGN IN</h1>
+        <form method="post" action="/login">
+            <label>
+                <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="User icon" class="user-icon" />
+                Username
+            </label>
+            <input type="text" id="username" name="username" required>
+            <label>
+                <img src="{{ url_for('static', filename='assets/images/password.png') }}" alt="Password icon" class="pass-icon" />
+                Password
+            </label>
+            <input type="password" id="password" name="password" required>
+            <div class="remember-forgot">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            <button type="submit"><b>SIGN IN</b></button>
+        </form>
+    </div>
+    <div class="sign-up-container">
+        <h1>Glad to see you!</h1>
+        <p>Join our community of book lovers!.<br>Sign Up to start reading reviews, share your thoughts, and connect with fellow readers.</p>
+        <button><b>SIGN UP</b></button>
+    </div>
+</body>
+</html>
+
+
+{% endblock %}

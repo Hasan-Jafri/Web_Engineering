@@ -1,0 +1,230 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #ffffff;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.02);
+    color: white;
+}
+
+.left-nav, .right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.left-nav {
+    justify-content: flex-start;
+}
+
+.right-nav {
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.search-container input[type="text"] {
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.search-container button {
+    padding: 5px 10px;
+    background-color: #2196F3;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.search-container button img {
+    width: 16px;
+    height: 16px;
+}
+
+.user-icon img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.logo img {
+    width: 50px;
+    height: auto;
+}
+
+.search-container {
+    position: relative;
+    border: 2px solid #0774c7;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    padding: 4px;
+}
+
+.search-container input:focus {
+    outline: none;
+    border: none;
+}
+
+.search-container button {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.search-container button img {
+    height: 20px;
+}
+
+.user-icon img {
+    height: 30px;
+}
+
+.container {
+    margin: 3%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+    gap: 200px;
+    background-color: transparent;
+}
+
+.left-column {
+    display: inline-flex;
+    gap: 20px; /* Add gap between the image and the book details */
+    column-gap: 50px;
+    row-gap: 50px;
+}
+
+.book-image img {
+    max-width: 100%; /* Ensure the image fits within its container */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px;
+}
+
+.book-details {
+    /* Allow the book details to grow to fill remaining space */
+    max-width: max-content;
+    max-height: max-content;
+    max-block-size: 100%;
+    width: 1000px;
+}
+
+
+/* .book-image img {
+    width: 250px;
+    height: auto;
+    border-radius: 10px;
+
+} */
+
+.book-image{
+    max-width: fit-content;
+    max-height: fit-content;
+    justify-content: end;
+}
+
+.right-column {
+    display: flex;
+    gap: 200px;
+    column-gap: 100px;
+}
+
+h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: #0774c7;
+}
+
+.author {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.rating {
+    font-size: 15px;
+    color: #ff9900;
+    margin-bottom: 10px;
+}
+
+.rating-count {
+    font-size: 15px;
+    color: #888;
+}
+
+.rating-distribution {
+    background-color: transparent;
+    margin-bottom: 10px;
+}
+
+.rating-distribution strong {
+    font-size: 15px;
+    color: #ffb03a;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.rating-distribution p {
+    color: #888;
+}
+
+.reading-status p {
+    margin: 5px 0;
+}
+
+.reading-status {
+    margin-top: 20px;
+}
+
+.published {
+    color: #888;
+    margin-top: 10px;
+}
+
+.reviews {
+    grid-column: 1 / 3;
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review {
+    margin-bottom: 20px;
+}
+
+.review h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.review p {
+    margin: 5px 0;
+}
+
+.review .rating {
+    font-size: 1em;
+    color: #ffb03a;
+    margin-bottom: 5px;
+}

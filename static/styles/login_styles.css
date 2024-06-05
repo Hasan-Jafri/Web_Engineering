@@ -1,0 +1,167 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.sign-in-container{
+    padding-left: 20px;
+    width: 40%;
+    align-content: center;
+    margin: 50px;
+}
+
+.sign-up-container {
+    background-image: linear-gradient(to bottom right, #004070 0%, #00d8ff 80%, #23c1f1 100%);
+    box-shadow: 0 2px 4px rgba(4, 89, 193, 0.1);
+    padding: 20px;
+    width: 50%;
+    align-content: center;
+}
+.sign-up-container h1 {
+    font-size: 30px;
+    text-align: center;
+    color: white;
+}
+
+.sign-in-container h1 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1f6bad;
+    margin-bottom: 20px;
+  }
+  
+  .sign-in-container form {
+
+    margin-bottom: 20px;
+  }
+  
+  .sign-in-container label {
+    font-size: 14px;
+    flex-basis: 28%;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .sign-in-container input[type="text"],
+  .sign-in-container input[type="password"] {
+    width: 60%;
+    border: none;
+
+    flex-basis: 88%;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 10px;
+  }
+
+  .sign-in-container input[type="text"],
+  .sign-in-container input[type="password"] {
+    width: 60%;
+    border: none;
+
+    flex-basis: 88%;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 10px;
+  }
+
+  .sign-in-container input[type="text"]:focus,
+  .sign-in-container input[type="password"]:focus {
+    outline: none;
+    border:none;
+  }
+  
+  
+  
+  .sign-in-container button[type="submit"] {
+    width: 25%;
+    padding: 10px;
+    margin-left: 100px;
+    margin-top: 40px;
+    background-image: linear-gradient(to top, #004070 0%, #00d8ff 80%, #23c1f1 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .sign-in-container button[type="submit"]:hover {
+    color:  #004070;
+    background-color: #23c1f1;
+  }
+  
+  .sign-in-container p {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.sign-up-container p {
+        font-size: 18px;
+        text-align: center;
+        color: white;
+}
+
+
+button {
+    cursor: pointer;
+    background-color: white;
+    color: #004070;
+    width: 20%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin: 0 auto;
+    display: block;
+}
+
+button:hover {
+    color: rgb(10, 122, 243);
+}
+
+.user-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    margin-bottom: -5px;
+  }
+
+.pass-icon {
+    width: 20x;
+    height: 20px;
+    margin-right: 5px;
+  }
+
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    z-index: 1; /* to ensure it's on top of other elements */
+  }
+
+  .logo-icon {
+    position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 250px;
+  height: 70px;
+
+  }

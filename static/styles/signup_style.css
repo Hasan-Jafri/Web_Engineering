@@ -1,0 +1,74 @@
+body {
+    background-image: linear-gradient(to bottom right, #004070 0%, #00d8ff 80%, #23c1f1 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-signup {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.form-signup h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #004070;
+    text-align: center;
+}
+
+.form-signup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #004070;
+}
+
+.form-signup input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-signup button {
+    width: 100%;
+    padding: 10px;
+    background-color: #004070;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-signup button:hover {
+    background-color: #003359;
+}
+
+.message {
+    margin-top: 20px;
+    color: red;
+    text-align: center;
+}

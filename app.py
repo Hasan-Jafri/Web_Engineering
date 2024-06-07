@@ -38,75 +38,30 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-def create_tables_if_not_exist():
-    tables = [User.__table__, Reviews.__table__]  # List of table objects
-
-    with db.engine.connect() as connection:
-        inspector = inspect(connection)
-        existing_tables = inspector.get_table_names()
-
-        for table in tables:
-            if table.name not in existing_tables:
-                table.create(db.engine)
-
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class Users(UserMixin, db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
 
     def __repr__(self):
         return '<User %r>' % self.username
+    def get_id(self):
+        return str(self.user_id)
 
 
 class Reviews(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    isbn = db.Column(db.String(50))
-    review_text = db.Column(db.String(10000), nullable=False)
-    rating = db.Column(db.Float())
+    review_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer,nullable=False)
+    book_id = db.Column(db.Integer,nullable=False)
+    review_text = db.Column(db.String(1000), nullable=False)
+    rating = db.Column(db.Float(),nullable=False)
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-class ReviewForm(FlaskForm):
-    review_text = StringField('review_text', validators=[InputRequired(), Length(min=10, max=10000)])
-    rating = FloatField('rating', validators=[InputRequired()])
-
-class LoginForm(FlaskForm):
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
-    remember = BooleanField('remember me')
-
-class RegisterForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
-
-def c_dict_list(column_names, l):
-    # return dictionary of rows with column keys
-    return [{c_name: col for c_name, col in zip(column_names, row)} for row in l]
-
-@app.route("/")
-def index():
-    books = db.session.execute(text('SELECT title, cover_id FROM books ORDER BY RANDOM() LIMIT 2')).fetchall()
-    book_html = ""
-    for book in books:
-        rating = find_Rating(cover_id=book[1],title=book[0])
-        book_html += f"""
-        
-            <div class="book-item">
-                <a href = "/book/{book[1]}&{book[0]}" class = "book-item" >
-                <img src="https://covers.openlibrary.org/b/id/{book[1]}-L.jpg" alt="{book[0]}">
-                </a>
-                <p class="title">{book[0]}</p>
-                <div class="rating">{get_rating_stars(rating)}</div>
-            </div>
-        """
-    if current_user.is_anonymous:
-        return render_template('home.html', books=[])
-    return render_template('home.html', book_html= book_html, name=current_user.username)
+class Books(db.Model):
+    book_id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String,nullable=False)
+    author = db.Column(db.String,nullable=False)
+    cover_id = db.Column(db.Integer,nullable=False)
 
 def get_rating_stars(rating):
     if rating == 0:
@@ -124,7 +79,39 @@ def find_Rating(cover_id,title):
             return x.get('ratings_average',0)
     return 0
 
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
 
+
+class LoginForm(FlaskForm):
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+    remember = BooleanField('remember me')
+
+# Home Page
+@app.route("/")
+def index():
+    if current_user.is_anonymous:
+        return render_template('login.html')
+    books = db.session.execute(text('SELECT title, cover_id FROM books ORDER BY RANDOM() LIMIT 10')).fetchall()
+    book_html = ""
+    for book in books:
+        rating = find_Rating(cover_id=book[1],title=book[0])
+        book_html += f"""
+        
+            <div class="book-item">
+                <a href = "/book/{book[1]}&{book[0]}" class = "book-item" >
+                <img src="https://covers.openlibrary.org/b/id/{book[1]}-L.jpg" alt="{book[0]}">
+                </a>
+                <p class="title">{book[0]}</p>
+                <div class="rating">{get_rating_stars(rating)}</div>
+            </div>
+        """
+
+    return render_template('home.html', book_html= book_html, name=current_user.username)
+
+# Login Credentials
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -132,44 +119,47 @@ def login():
         # Retrieve form data from request
         LoginForm.username = request.form.get('username')
         LoginForm.remember = request.form.get('remember_me')
-        user = User.query.filter_by(username=LoginForm.username).first()
+        user = Users.query.filter_by(username=LoginForm.username).first()
         if user:
             login_user(user, remember=LoginForm.remember)
             return redirect(url_for('index'))
         return '<h1>Invalid username or password</h1>'
     return render_template('login.html', form=form)
 
-@app.route('/signup', methods=['GET', 'POST'])
+# Sign Up details
+@app.route('/signup', methods = ['GET', "POST"])
 def signup():
-    form = RegisterForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        users = db.session.execute(text("SELECT username, email FROM users WHERE email = :email"),{'email' : email}).fetchone()
+        if users:
+            return render_template('signup.html',message = "Email Already Registered")
         try:
-            new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+            new_user = Users(username=username, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('index'))
+            return redirect(url_for('login'))
         except Exception as e:
             db.session.rollback()
             print("Error during sign-up:", e)
             return '<h1>Signup failed. Please try again.</h1>'
-    return render_template('signup.html', form=form)
+    else:
+        return render_template('signup.html')
 
+# Logout
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
-def add_wildcard_symbols(l):
-    return (f'%{i}%' for i in l)
-
+# Searching
 @app.route('/search', methods=['POST'])
 @login_required
 def search():
     title = request.form.get('search_query')
-    # query = text('SELECT * FROM books WHERE isbn LIKE :isbn AND title LIKE :title AND author LIKE :author LIMIT 500')
-    # l = db.session.execute(query, {'isbn': isbn, 'title': title, 'author': author}).fetchall()
-    # l = [{'isbn': isbn, 'title': title, 'author': author, 'year': year} for isbn, title, author, year in l]
     result = search(title)
     book_html = ""
     for book in result:
@@ -185,25 +175,74 @@ def search():
         """
     return render_template('searchresults.html', book_html=book_html, name=current_user.username,text = title)
 
-@app.route('/book/<cover_id>&<title>')
+# Book Details
+@app.route('/book/<cover_id>&<title>', methods=['GET', 'POST'])
+@app.route("/book/addReview", methods=['POST'])
 @login_required
-def book_detail(cover_id,title):
-    # form = ReviewForm()
-    # query = text('SELECT title, author, year FROM books WHERE isbn = :isbn')
-    # book = db.session.execute(query, {'isbn': isbn}).fetchone()
-    # if not book:
-    #     return 'invalid ISBN'
+def book_detail(cover_id=None, title=None):
+    if not title and not cover_id and request.method == 'POST':
+        title = request.form.get('title').replace("''","'")
+        cover_id = request.form.get('cover_id')
+    escaped_title = title.replace("'", "''")
     
-    # if request.method == 'POST':
-    #     if not form.validate_on_submit():
-    #         return 'invalid rating'
-    # title, author, year = book
-    # d = {'isbn': isbn, 'title': title, 'author': author, 'year': year}
-    # reviews = Reviews.query.filter_by(isbn=isbn).all()
-    book = search_one_book(cover_id = cover_id,title = title)
-    image_html = f"<img src='{book['cover_id']}-L.jpg' alt='{book['title']}'>"
-    print(f"book['cover_id']-L.jpg")
-    return render_template('book.html',book = book,image_html = image_html)
+    book = db.session.execute(
+        text(f"SELECT book_id, title, author FROM books WHERE title = '{escaped_title}' AND cover_id = '{cover_id}'")
+    ).fetchone()
+    
+    
+    title_ = title
+    cover_id_ = cover_id
+    book_details = search_one_book(cover_id=cover_id, title=title)
+    
+    if not book:
+        # Book not in the database, fetch details and add it
+        
+        new_book = Books(title=book_details['title'], author=book_details['author'], cover_id=book_details['cover_id'])
+        try:
+            db.session.add(new_book)
+            db.session.commit()
+            title_ = title
+            cover_id_ = cover_id
+        except Exception as e:
+            db.session.rollback()
+            print("Error during adding book:", e)
+            return '<h1>An Error Occurred. Try Again.</h1>'
+    
+    if request.method == 'POST':
+        # Add the review for the book
+        user_id = db.session.execute(text("SELECT user_id FROM users WHERE username = :username"),{'username':current_user.username}).fetchone()
+        
+        new_review = Reviews(
+            book_id=book[0],
+            review_text=request.form.get('review'),
+            rating=int(request.form.get('rating')),
+            user_id=user_id[0]
+        )
+        try:
+            db.session.add(new_review)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print("Error during adding review:", e)
+            return '<h1>Error Occurred in Adding Review</h1>'
+    
+    reviews = db.session.execute(text(f"SELECT r.review_text, r.rating, u.username FROM reviews r JOIN users u ON r.user_id = u.user_id WHERE r.book_id = {book[0]}")).fetchall()
+    reviews_html = ''
+    if reviews:
+        for review in reviews:
+            reviews_html += f"""
+            <div class "single-review">
+            <div class="review-details">
+                <p class ="username" >{review[2]}</p>
+                <div class = "rating">{get_rating_stars(review[1])}</div>
+                </div>
+                <div class = "review-text">{review[0]}</div></div>"""
+    
+    image_html = f"<img src='https://covers.openlibrary.org/b/id/{cover_id_}-L.jpg' alt='{title_}'>"
+    
+    return render_template('book.html', book=book_details, image_html=image_html, reviews_html=reviews_html)
+
+
 
 def search(title):
     books = []
@@ -224,8 +263,8 @@ def search_one_book(title,cover_id):
     if response.status_code == 200: 
         data = response.json()
         book = data['docs'][0]
-        result['cover_id'] = f"https://covers.openlibrary.org/b/id/{cover_id}" if cover_id != 0 else {url_for('static', filename='assets/images/Azfar.png') }
-        result['rating'] = book.get('ratings_average',0)
+        result['cover_id'] = cover_id
+        result['rating'] = f"{book.get('ratings_average', 0):.2f}"
         result['title'] = title
         result['author'] = book.get('author_name',['Anonymous'])[0]
         result['rating_count'] = book.get('ratings_count',0)

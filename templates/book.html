@@ -9,7 +9,6 @@
 <body>
     <header>
         <div class="navbar">
-
             <div class="left-nav">
                 <div class="logo">
                     <img src="{{ url_for('static', filename='assets/images/home_logo.png') }}" alt="Logo">
@@ -18,50 +17,94 @@
             <div class="right-nav">
                 <div class="search-container">
                     <form action="/search" method="post">
-                    <input type="text" placeholder="Search..." name = 'search_query'>
-                    <button type="submit"><img src="{{ url_for('static', filename='assets/images/search.png') }}" alt="Search"></button>
-                </form>
+                        <input type="text" placeholder="Search..." name='search_query' id='search_query'>
+                        <button type="submit"><img src="{{ url_for('static', filename='assets/images/search.png') }}" alt="Search"></button>
+                    </form>
+                    <p id="message"></p>
                 </div>
-                <div class="user-icon">
-                    <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="User">
+                <div class="user-menu">
+                    <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="User" class="user-icon" id="user-icon">
+                    <div class="dropdown-content" id="dropdown-content">
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </div>
                 </div>
             </div>
-            
         </div>
     </header>
+
     <div class="container">
         <div class="left-column">
             <div class="book-image">
                 {{ image_html | safe }}
             </div>
+        </div>
+        <div class="middle-column">
             <div class="book-details">
-                <h1>{{book['title']}}</h1>
-                <p class="author"><span style="color: black;font-weight: bold;">Author: </span>{{book['author']}}</p>
+                <h1>{{ book['title'] }}</h1>
+                <p class="author"><span style="color: black;font-weight: bold;">Author: </span>{{ book['author'] }}</p>
                 <div class="rating">
-                    <span>{{book['rating']}} ★</span>
-                    <span class="rating-count">{{book['rating_count']}}</span>
+                    <span>{{ book['rating'] }} ★</span>
+                    <span class="rating-count">{{ book['rating_count'] }}</span>
                 </div>
                 <div class="rating-distribution">
-                    <p><strong>★ ★ ★ ★ ★</strong> {{book['five_star']}}</p>
-                    <p><strong>★ ★ ★ ★ ☆</strong> {{book['four_star']}}</p>
-                    <p><strong>★ ★ ★ ☆ ☆</strong> {{book['three_star']}}</p>
-                    <p><strong>★ ★ ☆ ☆ ☆</strong> {{book['two_star']}}</p>
-                    <p><strong>★ ☆ ☆ ☆ ☆</strong> {{book['one_star']}}</p>
+                    <p><strong>★ ★ ★ ★ ★</strong> {{ book['five_star'] }}</p>
+                    <p><strong>★ ★ ★ ★ ☆</strong> {{ book['four_star'] }}</p>
+                    <p><strong>★ ★ ★ ☆ ☆</strong> {{ book['three_star'] }}</p>
+                    <p><strong>★ ★ ☆ ☆ ☆</strong> {{ book['two_star'] }}</p>
+                    <p><strong>★ ☆ ☆ ☆ ☆</strong> {{ book['one_star'] }}</p>
                 </div>
             </div>
         </div>
-        
         <div class="right-column">
             <div class="reading-status">
-                <p><strong>Want to Read:</strong> {{book['people_wanting_to_read']}}</p>
-                <p><strong>Already Read:</strong> {{book['already_read_count']}}</p>
-                <p><strong>Currently Reading:</strong> {{book['currently_reading_count']}}</p>
-                <p> <strong>Published:</strong> {{book['published']}}</p>
+                <p><strong>People wanting to read:</strong> {{ book['people_wanting_to_read'] }}</p>
+                <p><strong>People currently reading:</strong> {{ book['already_read_count'] }}</p>
+                <p><strong>People already read:</strong> {{ book['currently_reading_count'] }}</p>
+                <p><strong>Published in:</strong> {{ book['published'] }}</p>
             </div>
-            
         </div>
-       
-        
     </div>
+
+    <div class="review">
+        <h2>REVIEWS</h2>
+        <div class="reviews">
+            {{ reviews_html | safe }}
+        </div>
+        <div class="review-form">
+            <h2>Add Your Review</h2>
+            <form action="/book/addReview" method="post">
+                <label for="review">Review:</label><br>
+                <textarea id="review" name="review" rows="4" cols="50"></textarea><br>
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating">
+                    <option value="1">1 star</option>
+                    <option value="2">2 stars</option>
+                    <option value="3">3 stars</option>
+                    <option value="4">4 stars</option>
+                    <option value="5">5 stars</option>
+                </select><br>
+                <input type="hidden" name="cover_id" value="{{ book['cover_id'] }}">
+                <input type="hidden" name="title" value="{{ book['title'] }}">
+                <input type="submit" value="Submit Review">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const userIcon = document.getElementById("user-icon");
+            const dropdownContent = document.getElementById("dropdown-content");
+
+            userIcon.addEventListener("click", function() {
+                dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+            });
+
+            document.addEventListener("click", function(event) {
+                if (!userIcon.contains(event.target) && !dropdownContent.contains(event.target)) {
+                    dropdownContent.style.display = "none";
+                }
+            });
+        });
+    </script>
 </body>
 </html>

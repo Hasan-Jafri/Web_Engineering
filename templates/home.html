@@ -19,12 +19,16 @@
             <div class="right-nav">
                 <div class="search-container">
                     <form action="/search" method="post">
-                    <input type="text" placeholder="Search..." name = 'search_query'>
+                    <input type="text" placeholder="Search..." name = 'search_query' id = 'search_query'>
                     <button type="submit"><img src="{{ url_for('static', filename='assets/images/search.png') }}" alt="Search"></button>
                 </form>
+                <p id="message"></p>
                 </div>
-                <div class="user-icon">
-                    <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="User">
+                <div class="user-menu">
+                    <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="User" class="user-icon" id = "user-icon">
+                    <div class="dropdown-content" id = "dropdown-content">
+                        <a href="{{url_for('logout')}}">Logout</a>
+                    </div>
                 </div>
             </div>
             
@@ -39,48 +43,24 @@
         </div>
     </main>
 
-    <!-- <script>
-        // Retrieve the 'books' variable from Flask
-        document.addEventListener('DOMContentLoaded', function() {
-            const bookGrid = document.getElementById('book-grid');
-            
-            // Loop through each book
-            books.forEach(book => {
-                const bookItem = document.createElement('div');
-                bookItem.classList.add('book-item');
-                
-                // Create image element for book cover
-                const bookImage = document.createElement('img');
-                bookImage.src = "https://covers.openlibrary.org/b/id/" + book[1] + "-L.jpg";
-                bookImage.alt = book[0];
-                
-                // Create paragraph element for book title
-                const bookTitle = document.createElement('p');
-                bookTitle.classList.add('title');
-                bookTitle.textContent = book[0];
-                
-                // Create div element for book rating stars
-                const bookRating = document.createElement('div');
-                bookRating.classList.add('rating');
-                bookRating.innerHTML = getRatingStars(4);
-                
-                // Append elements to the book item
-                bookItem.appendChild(bookImage);
-                bookItem.appendChild(bookTitle);
-                bookItem.appendChild(bookRating);
-                
-                // Append book item to the book grid
-                bookGrid.appendChild(bookItem);
-            });
-        });
-    
-        // Function to generate star rating HTML based on rating value
-        function getRatingStars(rating) {
-            const fullStars = '★'.repeat(Math.floor(rating));
-            const emptyStars = '☆'.repeat(5 - Math.floor(rating));
-            return fullStars + emptyStars;
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+    const userIcon = document.getElementById("user-icon");
+    const dropdownContent = document.getElementById("dropdown-content");
+
+    userIcon.addEventListener("click", function() {
+        dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", function(event) {
+        if (!userIcon.contains(event.target) && !dropdownContent.contains(event.target)) {
+            dropdownContent.style.display = "none";
         }
-    </script> -->
+    });
+});
+
+    </script>
 </body>
 </html>
 

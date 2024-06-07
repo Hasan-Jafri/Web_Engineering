@@ -1,8 +1,8 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
 header {
@@ -55,7 +55,30 @@ header {
 
 .search-container button img {
     width: 16px;
-    height: 16px;
+    height: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Reduced shadow effect */
+    z-index: 1;
+    border-radius: 10px; /* Rounded borders for the dropdown */
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-radius: 5px; /* Rounded borders for the logout option */
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
 }
 
 .user-icon img {
@@ -96,57 +119,36 @@ header {
     height: 20px;
 }
 
-.user-icon img {
-    height: 30px;
-}
-
 .container {
+    display: flex;
     margin: 3%;
-    display: grid;
-    grid-template-columns: 1fr 2fr 2fr;
-    gap: 200px;
-    background-color: transparent;
 }
 
-.left-column {
-    display: inline-flex;
-    gap: 20px; /* Add gap between the image and the book details */
-    column-gap: 50px;
-    row-gap: 50px;
+.left-column, .middle-column{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.middle-column, .right-column{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.right-column{
+    width:150px;
+    height: 150px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .book-image img {
-    max-width: 100%; /* Ensure the image fits within its container */
-    height: auto; /* Maintain aspect ratio */
+    max-width: 80%;
+    height: auto;
     border-radius: 10px;
 }
 
 .book-details {
-    /* Allow the book details to grow to fill remaining space */
-    max-width: max-content;
-    max-height: max-content;
-    max-block-size: 100%;
-    width: 1000px;
-}
-
-
-/* .book-image img {
-    width: 250px;
-    height: auto;
-    border-radius: 10px;
-
-} */
-
-.book-image{
-    max-width: fit-content;
-    max-height: fit-content;
-    justify-content: end;
-}
-
-.right-column {
-    display: flex;
-    gap: 200px;
-    column-gap: 100px;
+    max-width: 300px;
 }
 
 h1 {
@@ -165,8 +167,12 @@ h1 {
     font-size: 15px;
     color: #ff9900;
     margin-bottom: 10px;
+    width: 40%;
 }
 
+h2{
+    border-bottom: 1px solid black;
+}
 .rating-count {
     font-size: 15px;
     color: #888;
@@ -196,35 +202,82 @@ h1 {
     margin-top: 20px;
 }
 
-.published {
-    color: #888;
-    margin-top: 10px;
+.review {
+    margin: 3%;
+    border-bottom: 1px solid #ccc;
+    width: 40%;
 }
 
-.reviews {
-    grid-column: 1 / 3;
+.review-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.username {
+    font-weight: bold;
+    color: black;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+    color: #ffb03a;
+}
+
+.review-text {
+    color: #333;
+    font-size: 14px;
+    margin-top: 5px; /* Add margin-top to create space between reviews */
+    border-bottom: black;
+}
+
+.review-form {
     margin-top: 20px;
-    background-color: white;
+    background-color: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.review {
-    margin-bottom: 20px;
+.review-form h2 {
+    margin-bottom: 10px;
+    color: #0774c7;
 }
 
-.review h3 {
-    font-size: 1.2em;
+.review-form label {
+    display: block;
     margin-bottom: 5px;
+    color: #333;
 }
 
-.review p {
-    margin: 5px 0;
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.review .rating {
-    font-size: 1em;
-    color: #ffb03a;
-    margin-bottom: 5px;
+.review-form select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.review-form input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #0774c7;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.review-form input[type="submit"]:hover {
+    background-color: #055ba6;
 }

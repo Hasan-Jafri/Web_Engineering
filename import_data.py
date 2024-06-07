@@ -3,7 +3,7 @@ import os
 import requests
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
-
+# Works incase to add books to the database.
 # Check for environment variable, prioritize URL from secrets.py
 if not os.getenv("DATABASE_URL"):
     try:
